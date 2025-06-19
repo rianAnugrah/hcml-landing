@@ -136,24 +136,7 @@ export default function Navbar() {
             })}
           </div>
 
-          {/* Additional Metro Tiles for Dashboard */}
-          <div className="mt-6">
-            <h3 className="text-white text-sm font-medium mb-3 px-1">Quick Actions</h3>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="bg-purple-600 h-16  flex items-center justify-center cursor-pointer hover:scale-95 transition-all duration-300 group">
-                <div className="text-center">
-                  <LayoutDashboard size={20} className="text-white mx-auto mb-1 group-hover:scale-110 transition-transform duration-300" />
-                  <span className="text-white text-xs font-medium">Dashboard</span>
-                </div>
-              </div>
-              <div className="bg-red-600 h-16  flex items-center justify-center cursor-pointer hover:scale-95 transition-all duration-300 group">
-                <div className="text-center">
-                  <Settings size={20} className="text-white mx-auto mb-1 group-hover:scale-110 transition-transform duration-300" />
-                  <span className="text-white text-xs font-medium">Settings</span>
-                </div>
-              </div>
-            </div>
-          </div>
+         
         </div>
 
         {/* Sidebar Footer */}
