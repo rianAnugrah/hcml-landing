@@ -1,6 +1,6 @@
 import { LayoutDashboard, MenuSquare, Search } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import MetroLink from "./metro-link";
 
 export default function Navbar() {
   return (
@@ -14,11 +14,11 @@ export default function Navbar() {
             <Search className="absolute top-0 left-0" />
             <input className="bg-white h-[3rem]" type="text"></input>
           </div> */}
-          <Link href="/" className="hover:text-[#f6c700]">Home</Link>
-          <Link href="/" className="hover:text-[#f6c700]">About Us</Link>
-          <Link href="/" className="hover:text-[#f6c700]">Operational</Link>
-          <Link href="/" className="hover:text-[#f6c700]">Career</Link>
-          <Link href="/" className="hover:text-[#f6c700]">News</Link>
+          <MetroLink href="/">Home</MetroLink>
+          <MetroLink href="/about">About Us</MetroLink>
+          <MetroLink href="/operational">Operational</MetroLink>
+          <MetroLink href="/career">Career</MetroLink>
+          <MetroLink href="/news">News</MetroLink>
         </div>
         
         <div>
