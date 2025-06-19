@@ -3,10 +3,11 @@ import React from "react";
 export interface TileData {
   id: number;
   title: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon?: React.ComponentType<{ size?: number; className?: string }>;
+  image?: string;
   color: string;
   size: "small" | "wide" | "tall" | "large";
-  content: string;
+  content?: React.ReactNode;
 }
 
 interface TileProps {
@@ -50,6 +51,7 @@ const Tile: React.FC<TileProps> = ({
   onDrop,
 }) => {
   const IconComponent = tile.icon;
+  
   return (
     <div
       key={tile.id}
@@ -85,8 +87,21 @@ const Tile: React.FC<TileProps> = ({
         <div className="w-full h-full bg-gradient-to-br from-white to-transparent"></div>
       </div>
 
+      {/* Background Image */}
+      {tile.image && (
+        <div className="absolute inset-0">
+          <img
+            src={tile.image}
+            alt={tile.title}
+            className="w-full h-full object-cover opacity-80 group-hover:opacity-40 transition-opacity duration-300"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+        </div>
+      )}
+
       {/* Drag Handle Indicator - Responsive */}
-      <div className="absolute top-1 left-1 sm:top-2 sm:left-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">
+      <div className="absolute top-1 left-1 sm:top-2 sm:left-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300 z-10">
         <div className="w-3 h-3 sm:w-4 sm:h-4 grid grid-cols-2 gap-0.5">
           <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full"></div>
           <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full"></div>
@@ -96,37 +111,39 @@ const Tile: React.FC<TileProps> = ({
       </div>
 
       {/* Content Container - Responsive */}
-      <div className="relative h-full p-2 sm:p-3 md:p-4 flex flex-col justify-between text-white">
-        {/* Icon - Responsive Sizing */}
-        <div className="flex justify-start">
-          <IconComponent
-            size={
-              tile.size === "large"
-                ? typeof window !== "undefined" && window.innerWidth < 640
-                  ? 32
+      <div className="relative h-full p-2 sm:p-3 md:p-4 flex flex-col justify-between text-white z-10">
+        {/* Icon or Image Icon - Responsive Sizing */}
+        {IconComponent ? (
+          <div className="flex justify-start">
+            <IconComponent
+              size={
+                tile.size === "large"
+                  ? typeof window !== "undefined" && window.innerWidth < 640
+                    ? 32
+                    : typeof window !== "undefined" && window.innerWidth < 768
+                    ? 40
+                    : 48
+                  : tile.size === "wide" || tile.size === "tall"
+                  ? typeof window !== "undefined" && window.innerWidth < 640
+                    ? 24
+                    : typeof window !== "undefined" && window.innerWidth < 768
+                    ? 30
+                    : 36
+                  : typeof window !== "undefined" && window.innerWidth < 640
+                  ? 20
                   : typeof window !== "undefined" && window.innerWidth < 768
-                  ? 40
-                  : 48
-                : tile.size === "wide" || tile.size === "tall"
-                ? typeof window !== "undefined" && window.innerWidth < 640
                   ? 24
-                  : typeof window !== "undefined" && window.innerWidth < 768
-                  ? 30
-                  : 36
-                : typeof window !== "undefined" && window.innerWidth < 640
-                ? 20
-                : typeof window !== "undefined" && window.innerWidth < 768
-                ? 24
-                : 28
-            }
-            className="drop-shadow-lg group-hover:scale-110 transition-transform duration-300"
-          />
-        </div>
+                  : 28
+              }
+              className="drop-shadow-lg group-hover:scale-110 transition-transform duration-300"
+            />
+          </div>
+        ) : <div>&nbsp;</div>}
 
         {/* Title and Content - Responsive Text */}
         <div className="flex flex-col justify-end">
           <h3
-            className={`font-semibold mb-1 ${
+            className={`font-semibold mb-1 drop-shadow-md ${
               tile.size === "large"
                 ? "text-sm sm:text-base md:text-lg lg:text-xl"
                 : tile.size === "wide" || tile.size === "tall"
@@ -137,7 +154,7 @@ const Tile: React.FC<TileProps> = ({
             {tile.title}
           </h3>
           <p
-            className={`text-white text-opacity-80 leading-tight ${
+            className={`text-white text-opacity-90 leading-tight drop-shadow-sm ${
               tile.size === "large"
                 ? "text-xs sm:text-sm"
                 : tile.size === "wide" || tile.size === "tall"
@@ -150,11 +167,11 @@ const Tile: React.FC<TileProps> = ({
         </div>
 
         {/* Hover Overlay */}
-        <div className="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-60 transition-opacity duration-300"></div>
+        <div className="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-60 transition-opacity duration-300 -z-10"></div>
       </div>
 
       {/* Active/Selected Indicator - Responsive */}
-      <div className="absolute top-1 right-1 sm:top-2 sm:right-2 w-2 h-2 sm:w-3 sm:h-3 bg-white bg-opacity-30 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      <div className="absolute top-1 right-1 sm:top-2 sm:right-2 w-2 h-2 sm:w-3 sm:h-3 bg-white bg-opacity-30 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
     </div>
   );
 };

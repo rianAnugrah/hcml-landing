@@ -13,22 +13,17 @@ import {
   Heart,
   Star,
   Clock,
+  Rss,
+  MapPin,
+  Briefcase,
 } from "lucide-react";
 import Tile, { TileData } from "@/components/tile";
 import FlipModal from "@/components/flip-modal";
-
-// Define types for tile and drag state
-interface Tile {
-  id: number;
-  title: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
-  color: string;
-  size: 'small' | 'wide' | 'tall' | 'large';
-  content: string;
-}
+import DragDropWrapper from "@/components/drag-drop-wrapper";
+import Link from "next/link";
 
 interface DraggedTile {
-  tile: Tile;
+  tile: TileData;
   index: number;
 }
 
@@ -39,227 +34,168 @@ interface MetroGridProps {
 const MetroGrid: React.FC<MetroGridProps> = ({ enableDragDrop = false }) => {
   const [tiles, setTiles] = useState<TileData[]>([
     {
-      id: 1,
-      title: "Mail",
-      icon: Mail,
-      color: "bg-[#1a2238] text-white",
-      size: "small",
-      content: "12 new messages",
-    },
-    {
-      id: 2,
-      title: "Phone",
-      icon: Phone,
-      color: "bg-[#23272f] text-[#f6c700]",
-      size: "small",
-      content: "3 missed calls",
-    },
-    {
-      id: 3,
-      title: "Calendar",
-      icon: Calendar,
-      color: "bg-[#14213d] text-white",
-      size: "wide",
-      content: "Meeting at 3 PM",
-    },
-    {
-      id: 4,
-      title: "Camera",
-      icon: Camera,
-      color: "bg-[#008080] text-white",
-      size: "wide",
-      content: "247 photos",
-    },
-    {
-      id: 5,
-      title: "Music",
-      icon: Music,
-      color: "bg-[#f6c700] text-[#1a2238]",
-      size: "small",
-      content: "Now playing...",
-    },
-    {
-      id: 6,
-      title: "Settings",
-      icon: Settings,
-      color: "bg-[#23272f] text-white",
-      size: "small",
-      content: "5 updates",
-    },
-    {
       id: 7,
       title: "Home",
       icon: Home,
       color: "[#1a2238] bg-[#f6c700]",
       size: "large",
-      content: "Welcome back!",
+      image: "/images/home-img.png",
+      content: "Welcome to HCML!",
     },
     {
       id: 8,
-      title: "Profile",
+      title: "About Us",
       icon: User,
       color: "bg-[#14213d] text-white",
       size: "small",
-      content: "John Doe",
+      content: "HCML",
+    },
+    {
+      id: 1,
+      title: "Mail",
+      icon: Mail,
+      color: "bg-[#1a2238] text-white",
+      size: "small",
+      content: <Link href="mailto:wbs.hcml.co.id">wbs.hcml.co.id</Link>,
+    },
+    {
+      id: 2,
+      title: "Phone",
+      icon: Phone,
+      color: "bg-[#008080] text-[#f6c700]",
+      size: "small",
+      content: "+622150806600",
     },
     {
       id: 9,
-      title: "Search",
-      icon: Search,
+      title: "Kang An",
+      image: "/images/kang-an.jpg",
       color: "bg-[#ff9900] text-[#1a2238]",
-      size: "wide",
-      content: "Find anything...",
-    },
-    {
-      id: 10,
-      title: "Favorites",
-      icon: Heart,
-      color: "bg-[#23272f] text-[#f6c700]",
       size: "small",
-      content: "24 items",
+      content: "General Manager",
     },
     {
-      id: 11,
-      title: "Reviews",
-      icon: Star,
-      color: "bg-[#1a2238] text-white",
-      size: "small",
-      content: "4.8 stars",
-    },
-    {
-      id: 12,
-      title: "Recent",
-      icon: Clock,
+      id: 4,
+      title: "Work Plan",
       color: "bg-[#008080] text-white",
       size: "wide",
-      content: "Last activity",
-    },
-    {
-      id: 13,
-      title: "Gallery",
-      icon: Camera,
-      color: "bg-[#23272f] text-white",
-      size: "wide",
-      content: "Photo strip",
+      image: "/images/work-plan.jpg",
+      content: "247 photos",
     },
     {
       id: 14,
-      title: "Weather",
-      icon: Star,
+      title: "Operational",
+      icon: Briefcase,
       color: "bg-[#14213d] text-[#f6c700]",
       size: "wide",
       content: "72°F Sunny",
     },
+    {
+      id: 3,
+      title: "BD Field",
+      image: "/images/bd-field.jpg",
+      color: "bg-[#14213d] text-white",
+      size: "wide",
+    },
+    {
+      id: 5,
+      title: "MDA & MBH Field",
+      image: "/images/mda-mbh-field.jpg",
+      color: "bg-[#f6c700] text-[#1a2238]",
+      size: "wide",
+    },
+    {
+      id: 12,
+      title: "ISEB Building",
+      icon: MapPin,
+      color: "bg-[#008080] text-white",
+      size: "small",
+      content: "Jakarta Office",
+    },
+    {
+      id: 13,
+      title: "Intiland Tower",
+      icon: MapPin,
+      color: "bg-[#23272f] text-white",
+      size: "small",
+      content: "Surabaya Office",
+    },
+
+    {
+      id: 11,
+      title: "Career",
+      icon: Star,
+      color: "bg-[#1a2238] text-white",
+      size: "small",
+      content: "Join Us",
+    },
+    {
+      id: 6,
+      title: "News",
+      icon: Rss,
+      color: "bg-[#ff9900] text-white",
+      size: "wide",
+      content: "5 updates",
+    },
   ]);
 
-  const [draggedTile, setDraggedTile] = useState<DraggedTile | null>(null);
-  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [selectedTile, setSelectedTile] = useState<TileData | null>(null);
-
-  const getSizeClasses = (size: Tile['size']): string => {
-    switch (size) {
-      case "small": // 1:1 ratio - responsive spans
-        return "col-span-1 row-span-1 aspect-square";
-      case "wide": // 2:1 ratio - responsive spans
-        return "col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-2 row-span-1 aspect-[2/1]";
-      case "tall": // 1:2 ratio - responsive spans
-        return "col-span-1 row-span-2 aspect-[1/2]";
-      case "large": // 2:2 ratio - adaptive sizing
-        return "col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-2 row-span-2 aspect-square";
-      default:
-        return "col-span-1 row-span-1 aspect-square";
-    }
-  };
 
   const handleTileClick = (tileId: number) => {
     const tile = tiles.find((t) => t.id === tileId);
     if (tile) setSelectedTile(tile);
   };
 
-  const handleDragStart = (
-    e: React.DragEvent<HTMLDivElement>,
-    tile: Tile,
-    index: number
-  ) => {
-    setDraggedTile({ tile, index });
-    e.dataTransfer.effectAllowed = "move";
-    if (e.target instanceof HTMLDivElement) {
-      e.dataTransfer.setData("text/html", e.target.outerHTML);
-      e.target.style.opacity = "0.5";
-    }
-  };
-
-  const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
-    if (e.target instanceof HTMLDivElement) {
-      e.target.style.opacity = "1";
-    }
-    setDraggedTile(null);
-    setDragOverIndex(null);
-  };
-
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>, index: number) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
-    setDragOverIndex(index);
-  };
-
-  const handleDragLeave = () => {
-    setDragOverIndex(null);
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>, dropIndex: number) => {
-    e.preventDefault();
-
-    if (!draggedTile || draggedTile.index === dropIndex) {
-      setDragOverIndex(null);
-      return;
-    }
-
-    const newTiles = [...tiles];
-    const draggedItem = newTiles[draggedTile.index];
-
-    // Remove the dragged item
-    newTiles.splice(draggedTile.index, 1);
-
-    // Insert at new position
-    const insertIndex =
-      draggedTile.index < dropIndex ? dropIndex - 1 : dropIndex;
-    newTiles.splice(insertIndex, 0, draggedItem);
-
+  const handleTilesReorder = (newTiles: TileData[]) => {
     setTiles(newTiles);
-    setDraggedTile(null);
-    setDragOverIndex(null);
   };
 
   return (
-    <div className="  p-3 sm:p-4 md:p-6 ">
-      <div className="max-w-7xl mx-auto ">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-light text-white mb-4 sm:my-6 md:my-12">
-          Metro Dashboard
+    <div className="p-3 sm:p-4 md:p-6">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl text-white mb-4 sm:my-6 md:my-12 ">
+          <strong>HCML</strong> - Husky-CNOOC Madura Limited
         </h1>
 
-        {/* Main Grid Container - Fully Responsive */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6  xl:grid-cols-8 gap-0  auto-rows-min">
-          {tiles.map((tile, index) => {
-            const isDragging = draggedTile?.index === index;
-            const isDropTarget = dragOverIndex === index;
-            return (
-              <Tile
-                key={tile.id}
-                tile={tile}
-                isDragging={isDragging}
-                isDropTarget={isDropTarget}
-                enableDragDrop={enableDragDrop}
-                onClick={handleTileClick}
-                onDragStart={(e) => handleDragStart(e, tile, index)}
-                onDragEnd={handleDragEnd}
-                onDragOver={(e) => handleDragOver(e, index)}
-                onDragLeave={handleDragLeave}
-                onDrop={(e) => handleDrop(e, index)}
-              />
-            );
-          })}
-        </div>
+        <DragDropWrapper
+          tiles={tiles}
+          onTilesReorder={handleTilesReorder}
+          enableDragDrop={enableDragDrop}
+        >
+          {({
+            tiles: currentTiles,
+            draggedTile,
+            dragOverIndex,
+            handleDragStart,
+            handleDragEnd,
+            handleDragOver,
+            handleDragLeave,
+            handleDrop,
+          }) => (
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-8 gap-0 auto-rows-min">
+              {currentTiles.map((tile, index) => {
+                const isDragging = draggedTile?.index === index;
+                const isDropTarget = dragOverIndex === index;
+                return (
+                  <Tile
+                    key={tile.id}
+                    tile={tile}
+                    isDragging={isDragging}
+                    isDropTarget={isDropTarget}
+                    enableDragDrop={enableDragDrop}
+                    onClick={handleTileClick}
+                    onDragStart={(e) => handleDragStart(e, tile, index)}
+                    onDragEnd={handleDragEnd}
+                    onDragOver={(e) => handleDragOver(e, index)}
+                    onDragLeave={handleDragLeave}
+                    onDrop={(e) => handleDrop(e, index)}
+                  />
+                );
+              })}
+            </div>
+          )}
+        </DragDropWrapper>
+
         {selectedTile && (
           <FlipModal
             tile={selectedTile}
