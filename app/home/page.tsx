@@ -80,16 +80,9 @@ const MetroGrid: React.FC<MetroGridProps> = ({ enableDragDrop = false }) => {
       color: "bg-[#008080] text-white",
       size: "wide",
       image: "/images/work-plan.jpg",
-      content: "247 photos",
+      // content: "247 photos",
     },
-    {
-      id: 14,
-      title: "Operational",
-      icon: Briefcase,
-      color: "bg-[#14213d] text-[#f6c700]",
-      size: "wide",
-      content: "72°F Sunny",
-    },
+    
     {
       id: 3,
       title: "BD Field",
@@ -103,6 +96,14 @@ const MetroGrid: React.FC<MetroGridProps> = ({ enableDragDrop = false }) => {
       image: "/images/mda-mbh-field.jpg",
       color: "bg-[#f6c700] text-[#1a2238]",
       size: "wide",
+    },
+    {
+      id: 14,
+      title: "Operational",
+      icon: Briefcase,
+      color: "bg-[#14213d] text-[#f6c700]",
+      size: "wide",
+      // content: "72°F Sunny",
     },
     {
       id: 12,

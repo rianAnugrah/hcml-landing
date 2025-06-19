@@ -90,7 +90,7 @@ const Tile: React.FC<TileProps> = ({
         hover:z-10
         group
         p-4 sm:p-0
-        border-2 border-gray-950
+        border-2 border-gray-900
         ${isDragging ? "opacity-100 scale-95" : ""}
         ${isDropTarget && enableDragDrop ? "ring-2 sm:ring-4 ring-white ring-opacity-50 scale-90" : ""}
         select-none
@@ -116,14 +116,14 @@ const Tile: React.FC<TileProps> = ({
       )}
 
       {/* Drag Handle Indicator - Responsive */}
-      <div className="absolute top-1 left-1 sm:top-2 sm:left-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300 z-10">
+      {/* <div className="absolute top-1 left-1 sm:top-2 sm:left-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300 z-10">
         <div className="w-3 h-3 sm:w-4 sm:h-4 grid grid-cols-2 gap-0.5">
           <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full"></div>
           <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full"></div>
           <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full"></div>
           <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full"></div>
         </div>
-      </div>
+      </div> */}
 
       {/* Content Container - Responsive */}
       <div className="relative h-full p-2 sm:p-3 md:p-4 flex flex-col justify-between text-white z-10">
@@ -167,7 +167,7 @@ const Tile: React.FC<TileProps> = ({
       </div>
 
       {/* Active/Selected Indicator - Responsive */}
-      <div className="absolute top-1 right-1 sm:top-2 sm:right-2 w-2 h-2 sm:w-3 sm:h-3 bg-white bg-opacity-30 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+      {/* <div className="absolute top-1 right-1 sm:top-2 sm:right-2 w-2 h-2 sm:w-3 sm:h-3 bg-white bg-opacity-30 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div> */}
     </div>
   );
 };

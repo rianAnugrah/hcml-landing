@@ -17,45 +17,73 @@ const FlipModal: React.FC<FlipModalProps> = ({ tile, onClose, children }) => {
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70"
       onClick={handleBackdropClick}
     >
-      <div className="relative w-full max-w-md p-6" style={{ perspective: 1200 }}>
+      <div className="relative w-full max-w-lg mx-4" style={{ perspective: 1200 }}>
         <div 
           className="flip-card-inner animate-flip"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="flip-card-front bg-white rounded-lg shadow-lg p-6 flex flex-col items-center">
-            <button
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
-              onClick={onClose}
-              aria-label="Close"
-            >
-              <X size={32}/>
-            </button>
-            <div className={`mb-4 ${tile.color} rounded-full w-16 h-16 flex items-center justify-center`}>
-              {tile.icon && <tile.icon size={32} className="" />}
+          <div className="flip-card-front bg-white border-0 p-0 flex flex-col overflow-hidden">
+            {/* Header Bar */}
+            <div className={`${tile.color} p-6 flex items-center justify-between`}>
+              <div className="flex items-center space-x-4">
+                <div className="bg-white/20 w-12 h-12 flex items-center justify-center">
+                  {tile.icon && <tile.icon size={24} className="text-white" />}
+                </div>
+                <h2 className="text-2xl font-light text-white uppercase tracking-wide">{tile.title}</h2>
+              </div>
+              <button
+                className="text-white/80 hover:text-white transition-colors duration-200 p-2 hover:bg-white/10"
+                onClick={onClose}
+                aria-label="Close"
+              >
+                <X size={24} strokeWidth={1}/>
+              </button>
             </div>
-            <h2 className="text-xl font-bold mb-2 text-center text-gray-900">{tile.title}</h2>
-            <div className="text-gray-700 text-center mb-4">{tile.content}</div>
-            {/* Dynamic content area: you can add more custom rendering here */}
-            <div className="mt-4">
-              <span className="text-xs text-gray-400">{children}</span>
+            
+            {/* Content Area */}
+            <div className="p-8 flex-1">
+              <div className="text-gray-800 text-lg font-light leading-relaxed mb-6">
+                {tile.content}
+              </div>
+              
+              {/* Additional Content */}
+              {children && (
+                <div className="border-l-4 border-gray-300 pl-6 mt-8">
+                  <div className="text-gray-600 text-sm font-light uppercase tracking-wider">
+                    {children}
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            {/* Bottom Action Bar */}
+            <div className="bg-gray-100 px-8 py-4 border-t border-gray-200">
+              <div className="flex justify-end">
+                <button
+                  onClick={onClose}
+                  className="bg-gray-800 text-white px-8 py-3 uppercase text-sm font-medium tracking-wide hover:bg-gray-700 transition-colors duration-200"
+                >
+                  Close
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
       <style jsx>{`
         .flip-card-inner {
-          transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+          transition: transform 0.3s cubic-bezier(0.4, 0.2, 0.2, 1);
           transform-style: preserve-3d;
         }
         .animate-flip {
-          animation: flipIn 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+          animation: flipIn 0.3s cubic-bezier(0.4, 0.2, 0.2, 1);
         }
         @keyframes flipIn {
           from {
-            transform: rotateY(90deg) scale(0.8);
+            transform: rotateY(90deg) scale(0.9);
             opacity: 0;
           }
           to {
