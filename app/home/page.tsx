@@ -173,7 +173,7 @@ const MetroGrid: React.FC<MetroGridProps> = ({ enableDragDrop = false }) => {
             handleDragLeave,
             handleDrop,
           }) => (
-            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-8 gap-0 auto-rows-min">
+            <div className="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-8 gap-0 auto-rows-min">
               {currentTiles.map((tile, index) => {
                 const isDragging = draggedTile?.index === index;
                 const isDropTarget = dragOverIndex === index;

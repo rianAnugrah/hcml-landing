@@ -1,4 +1,5 @@
 import React from "react";
+import { createPortal } from "react-dom";
 import { TileData } from "@/components/tile";
 import { X } from "lucide-react";
 
@@ -15,7 +16,7 @@ const FlipModal: React.FC<FlipModalProps> = ({ tile, onClose, children }) => {
     }
   };
 
-  return (
+  const modalContent = (
     <div 
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/70"
       onClick={handleBackdropClick}
@@ -94,6 +95,8 @@ const FlipModal: React.FC<FlipModalProps> = ({ tile, onClose, children }) => {
       `}</style>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 };
 
 export default FlipModal; 

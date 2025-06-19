@@ -31,7 +31,7 @@ export default function RootLayout({
       >
         <div className="flex flex-col w-full min-h-screen bg-gray-900">
           <Navbar />
-          <div className="w-full h-[calc(100svh_-_8rem)] lg:h-[calc(100svh_-_8rem)] overflow-y-auto">
+          <div className="w-full min-h-[calc(100dvh_-_8rem)] overflow-y-auto">
             {children}
           </div>
 
