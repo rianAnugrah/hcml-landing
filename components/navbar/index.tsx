@@ -5,7 +5,7 @@ export default function Navbar() {
   return (
     <div className="bg-[#1a2238] px-4">
       <div className="max-w-7xl mx-auto gap-6 h-[5rem] flex items-center ">
-        <button className="hover:bg-[#f6c700] h-full aspect-square flex items-center bg-[#14213d] justify-center">
+        <button className="hover:bg-[#f6c700] h-full aspect-square flex cursor-pointer transition-all duration-300 hover:scale-90 items-center bg-gray-700 justify-center">
           <LayoutDashboard />
         </button>
         <div className="flex flex-grow relative">

@@ -38,6 +38,19 @@ function getSizeClasses(size: TileData["size"]): string {
   }
 }
 
+function getIconClasses(size: TileData["size"]): string {
+  switch (size) {
+    case "large":
+      return "w-12 h-12 sm:w-10 sm:h-10 md:w-12 md:h-12";
+    case "wide":
+    case "tall":
+      return "w-12 h-12 sm:w-7 sm:h-7 md:w-9 md:h-9";
+    case "small":
+    default:
+      return "w-12 h-12 sm:w-6 sm:h-6 md:w-7 md:h-7";
+  }
+}
+
 const Tile: React.FC<TileProps> = ({
   tile,
   isDragging = false,
@@ -76,6 +89,8 @@ const Tile: React.FC<TileProps> = ({
         hover:shadow-2xl
         hover:z-10
         group
+        p-4 sm:p-0
+        border-2 border-gray-950
         ${isDragging ? "opacity-100 scale-95" : ""}
         ${isDropTarget && enableDragDrop ? "ring-2 sm:ring-4 ring-white ring-opacity-50 scale-90" : ""}
         select-none
@@ -83,9 +98,9 @@ const Tile: React.FC<TileProps> = ({
       `}
     >
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
+      {/* <div className="absolute inset-0 opacity-10">
         <div className="w-full h-full bg-gradient-to-br from-white to-transparent"></div>
-      </div>
+      </div> */}
 
       {/* Background Image */}
       {tile.image && (
@@ -112,30 +127,11 @@ const Tile: React.FC<TileProps> = ({
 
       {/* Content Container - Responsive */}
       <div className="relative h-full p-2 sm:p-3 md:p-4 flex flex-col justify-between text-white z-10">
-        {/* Icon or Image Icon - Responsive Sizing */}
+        {/* Icon - Responsive Sizing with Tailwind */}
         {IconComponent ? (
           <div className="flex justify-start">
             <IconComponent
-              size={
-                tile.size === "large"
-                  ? typeof window !== "undefined" && window.innerWidth < 640
-                    ? 32
-                    : typeof window !== "undefined" && window.innerWidth < 768
-                    ? 40
-                    : 48
-                  : tile.size === "wide" || tile.size === "tall"
-                  ? typeof window !== "undefined" && window.innerWidth < 640
-                    ? 24
-                    : typeof window !== "undefined" && window.innerWidth < 768
-                    ? 30
-                    : 36
-                  : typeof window !== "undefined" && window.innerWidth < 640
-                  ? 20
-                  : typeof window !== "undefined" && window.innerWidth < 768
-                  ? 24
-                  : 28
-              }
-              className="drop-shadow-lg group-hover:scale-110 transition-transform duration-300"
+              className={`${getIconClasses(tile.size)} drop-shadow-lg group-hover:scale-110 transition-transform duration-300`}
             />
           </div>
         ) : <div>&nbsp;</div>}
@@ -159,7 +155,7 @@ const Tile: React.FC<TileProps> = ({
                 ? "text-xs sm:text-sm"
                 : tile.size === "wide" || tile.size === "tall"
                 ? "text-xs"
-                : "text-xs hidden sm:block"
+                : "text-xs  sm:block"
             }`}
           >
             {tile.content}
@@ -167,7 +163,7 @@ const Tile: React.FC<TileProps> = ({
         </div>
 
         {/* Hover Overlay */}
-        <div className="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-60 transition-opacity duration-300 -z-10"></div>
+        {/* <div className="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-60 transition-opacity duration-300 -z-10"></div> */}
       </div>
 
       {/* Active/Selected Indicator - Responsive */}
