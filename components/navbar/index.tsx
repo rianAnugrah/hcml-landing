@@ -53,7 +53,7 @@ export default function Navbar() {
         <div className="h-[5rem] flex items-center justify-between">
           <button
             onClick={toggleSidebar}
-            className="p-2 text-white hover:bg-[#f6c700] hover:text-[#1a2238] transition-all duration-300 rounded-md"
+            className="p-2 text-white hover:bg-[#f6c700] hover:text-[#1a2238] transition-all duration-300"
           >
             <Menu size={24} />
           </button>
@@ -93,7 +93,7 @@ export default function Navbar() {
           </div>
           <button
             onClick={toggleSidebar}
-            className="p-2 text-white hover:bg-[#f6c700] hover:text-[#1a2238] transition-all duration-300 rounded-md"
+            className="p-2 text-white hover:bg-[#f6c700] hover:text-[#1a2238] transition-all duration-300"
           >
             <X size={20} />
           </button>

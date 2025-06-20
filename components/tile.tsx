@@ -118,10 +118,10 @@ const Tile: React.FC<TileProps> = ({
       {/* Drag Handle Indicator - Responsive */}
       {/* <div className="absolute top-1 left-1 sm:top-2 sm:left-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300 z-10">
         <div className="w-3 h-3 sm:w-4 sm:h-4 grid grid-cols-2 gap-0.5">
-          <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full"></div>
-          <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full"></div>
-          <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full"></div>
-          <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full"></div>
+          <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white"></div>
+          <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white"></div>
+          <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white"></div>
+          <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white"></div>
         </div>
       </div> */}
 
@@ -167,7 +167,7 @@ const Tile: React.FC<TileProps> = ({
       </div>
 
       {/* Active/Selected Indicator - Responsive */}
-      {/* <div className="absolute top-1 right-1 sm:top-2 sm:right-2 w-2 h-2 sm:w-3 sm:h-3 bg-white bg-opacity-30 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div> */}
+      {/* <div className="absolute top-1 right-1 sm:top-2 sm:right-2 w-2 h-2 sm:w-3 sm:h-3 bg-white bg-opacity-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div> */}
     </div>
   );
 };

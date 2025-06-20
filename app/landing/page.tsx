@@ -12,7 +12,7 @@ export default function App() {
 
       {/* Metro Grid Section */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-6">
-        <div className="bg-green-500 text-white p-6 rounded-lg shadow-lg hover:scale-105 transition">
+        <div className="bg-green-500 text-white p-6 shadow-lg hover:scale-105 transition">
           <h2 className="text-xl font-semibold">Tentang HCML</h2>
           <p className="mt-2 text-sm">
             HCML adalah KKKS yang ditunjuk oleh SKK Migas untuk mengeksplorasi dan
@@ -20,7 +20,7 @@ export default function App() {
           </p>
         </div>
 
-        <div className="bg-yellow-400 text-gray-800 p-6 rounded-lg shadow-lg hover:scale-105 transition">
+        <div className="bg-yellow-400 text-gray-800 p-6 shadow-lg hover:scale-105 transition">
           <h2 className="text-xl font-semibold">Kantor</h2>
           <ul className="mt-2 text-sm space-y-1">
             <li><strong>Jakarta:</strong> BEI Tower 1, Sudirman</li>
@@ -28,14 +28,14 @@ export default function App() {
           </ul>
         </div>
 
-        <div className="bg-red-500 text-white p-6 rounded-lg shadow-lg hover:scale-105 transition">
+        <div className="bg-red-500 text-white p-6 shadow-lg hover:scale-105 transition">
           <h2 className="text-xl font-semibold">Operasi</h2>
           <p className="mt-2 text-sm">
             Lapangan BD & MDA/MBH mensuplai gas dan kondensat ke Jawa Timur dengan total kapasitas lebih dari 220 MMSCFD.
           </p>
         </div>
 
-        <div className="bg-purple-600 text-white p-6 rounded-lg shadow-lg hover:scale-105 transition">
+        <div className="bg-purple-600 text-white p-6 shadow-lg hover:scale-105 transition">
           <h2 className="text-xl font-semibold">Program Sosial</h2>
           <p className="mt-2 text-sm">
             Pelatihan jaring nelayan, sekolah komunitas, dan sertifikasi NEBOSH untuk keselamatan kerja.
@@ -51,7 +51,7 @@ export default function App() {
         </p>
         <a
           href="https://recruitment.hcml.co.id"
-          className="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition"
+          className="bg-blue-600 text-white px-6 py-3 hover:bg-blue-700 transition"
         >
           Daftar Sekarang
         </a>
