@@ -21,6 +21,7 @@ import Tile, { TileData } from "@/components/tile";
 import FlipModal from "@/components/flip-modal";
 import DragDropWrapper from "@/components/drag-drop-wrapper";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface DraggedTile {
   tile: TileData;
@@ -32,6 +33,8 @@ interface MetroGridProps {
 }
 
 const MetroGrid: React.FC<MetroGridProps> = ({ enableDragDrop = false }) => {
+
+  const router = useRouter();
   const [tiles, setTiles] = useState<TileData[]>([
     {
       id: 7,
@@ -129,6 +132,9 @@ const MetroGrid: React.FC<MetroGridProps> = ({ enableDragDrop = false }) => {
       color: "bg-[#1a2238] text-white",
       size: "small",
       content: "Join Us",
+      onClick: () => {
+        router.push('/career');
+      },
     },
     {
       id: 6,
@@ -184,7 +190,7 @@ const MetroGrid: React.FC<MetroGridProps> = ({ enableDragDrop = false }) => {
                     isDragging={isDragging}
                     isDropTarget={isDropTarget}
                     enableDragDrop={enableDragDrop}
-                    onClick={handleTileClick}
+                    onClick={tile.onClick ? tile.onClick : handleTileClick}
                     onDragStart={(e) => handleDragStart(e, tile, index)}
                     onDragEnd={handleDragEnd}
                     onDragOver={(e) => handleDragOver(e, index)}
