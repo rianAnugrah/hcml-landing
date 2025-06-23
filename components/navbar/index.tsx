@@ -1,14 +1,16 @@
 "use client";
 
-import { LayoutDashboard, Menu, X, Home, Users, Settings, Briefcase, Newspaper } from "lucide-react";
+import { LayoutDashboard, Menu, X, Home, Users, Settings, Briefcase, Newspaper, ChevronDown, Shield, FileText, XCircle, CreditCard } from "lucide-react";
 import Image from "next/image";
 import MetroLink from "./metro-link";
 import { useState } from "react";
 
 export default function Navbar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isHSEDropdownOpen, setIsHSEDropdownOpen] = useState(false);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+  const toggleHSEDropdown = () => setIsHSEDropdownOpen(!isHSEDropdownOpen);
 
   const navItems = [
     { href: "/", label: "Home", icon: Home },
@@ -16,6 +18,14 @@ export default function Navbar() {
     { href: "/operation", label: "Operation", icon: Settings },
     { href: "/career", label: "Career", icon: Briefcase },
     { href: "/news", label: "News", icon: Newspaper },
+  ];
+
+  const hseItems = [
+    { href: "/hse-logo", label: "Logo", icon: Shield },
+    { href: "/hse-philosophy", label: "Philosophy", icon: Users },
+    { href: "/hse-policy", label: "Policy", icon: FileText },
+    { href: "/hse-donts-dos", label: "Don'ts until Do's", icon: XCircle },
+    { href: "/hse-passport", label: "Passport", icon: CreditCard },
   ];
 
   return (
@@ -31,7 +41,61 @@ export default function Navbar() {
             <MetroLink href="/about">About Us</MetroLink>
             <MetroLink href="/operation">Operational</MetroLink>
             <MetroLink href="/career">Career</MetroLink>
-            <MetroLink href="/hse-philosophy">HSE Philosophy</MetroLink>
+            
+            {/* HSE Dropdown */}
+            <div className="relative group">
+              <button
+                onClick={toggleHSEDropdown}
+                className="text-white  transition-all duration-300 font-medium px-4 py-2 flex items-center gap-2 hover:bg-[#f6c700] hover:bg-opacity-10 "
+              >
+                HSE
+                <ChevronDown 
+                  size={16} 
+                  className={`transition-transform duration-300 ${isHSEDropdownOpen ? 'rotate-180' : ''}`} 
+                />
+              </button>
+              
+              {/* Dropdown Menu */}
+              <div className={`
+                absolute top-full left-0 mt-2 w-64 bg-[#1a2238] border border-gray-600  shadow-xl z-50
+                transform transition-all duration-300 origin-top
+                ${isHSEDropdownOpen ? 'scale-100 opacity-100 visible' : 'scale-95 opacity-0 invisible'}
+              `}>
+                <div className="p-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    {hseItems.map((item, index) => {
+                      const IconComponent = item.icon;
+                      return (
+                        <a
+                          key={item.href}
+                          href={item.href}
+                          className={`
+                            group relative overflow-hidden h-16 flex flex-col items-center justify-center
+                            ${index === 0 ? 'bg-[#f6c700]' : index % 4 === 1 ? 'bg-blue-600' : index % 4 === 2 ? 'bg-green-600' : 'bg-purple-600'}
+                            hover:scale-95 transition-all duration-300 cursor-pointer 
+                            ${index === 0 ? 'col-span-2' : ''}
+                          `}
+                          onClick={() => setIsHSEDropdownOpen(false)}
+                        >
+                          <div className="absolute inset-0 bg-black bg-opacity-10 group-hover:bg-opacity-20 transition-all duration-300" />
+                          <div className="relative flex flex-col items-center justify-center text-white">
+                            <IconComponent 
+                              size={18} 
+                              className="mb-1 group-hover:scale-110 transition-transform duration-300" 
+                            />
+                            <span className="text-xs font-medium text-center leading-tight">
+                              {item.label}
+                            </span>
+                          </div>
+                          <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
+                        </a>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <MetroLink href="/news">News</MetroLink>
           </div>
           
@@ -48,6 +112,14 @@ export default function Navbar() {
           </div>
         </div>
       </div>
+
+      {/* Click outside to close dropdown */}
+      {isHSEDropdownOpen && (
+        <div 
+          className="fixed inset-0 z-40 hidden lg:block" 
+          onClick={() => setIsHSEDropdownOpen(false)}
+        />
+      )}
 
       {/* Mobile Header */}
       <div className="bg-[#1a2238] px-4 lg:hidden">
@@ -137,7 +209,41 @@ export default function Navbar() {
             })}
           </div>
 
-         
+          {/* HSE Section in Mobile */}
+          <div className="mt-6">
+            <h3 className="text-white text-sm font-medium mb-3 px-2">HSE</h3>
+            <div className="grid grid-cols-2 gap-2">
+              {hseItems.map((item, index) => {
+                const IconComponent = item.icon;
+                return (
+                  <div
+                    key={item.href}
+                    className={`
+                      group relative overflow-hidden h-16
+                      ${index === 0 ? 'bg-[#f6c700] col-span-2' : index % 4 === 1 ? 'bg-blue-600' : index % 4 === 2 ? 'bg-green-600' : 'bg-purple-600'}
+                      hover:scale-95 transition-all duration-300 cursor-pointer
+                    `}
+                    onClick={() => {
+                      window.location.href = item.href;
+                      setIsSidebarOpen(false);
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-black bg-opacity-10 group-hover:bg-opacity-20 transition-all duration-300" />
+                    <div className="relative h-full flex flex-col items-center justify-center text-white p-2">
+                      <IconComponent 
+                        size={16} 
+                        className="mb-1 group-hover:scale-110 transition-transform duration-300" 
+                      />
+                      <span className="text-xs font-medium text-center leading-tight">
+                        {item.label}
+                      </span>
+                    </div>
+                    <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
 
         {/* Sidebar Footer */}
