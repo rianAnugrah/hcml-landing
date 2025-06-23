@@ -13,7 +13,7 @@ export default function Navbar() {
   const navItems = [
     { href: "/", label: "Home", icon: Home },
     { href: "/about", label: "About Us", icon: Users },
-    { href: "/operational", label: "Operational", icon: Settings },
+    { href: "/operation", label: "Operation", icon: Settings },
     { href: "/career", label: "Career", icon: Briefcase },
     { href: "/news", label: "News", icon: Newspaper },
   ];
@@ -29,8 +29,9 @@ export default function Navbar() {
           <div className="flex flex-grow relative gap-4">
             <MetroLink href="/">Home</MetroLink>
             <MetroLink href="/about">About Us</MetroLink>
-            <MetroLink href="/operational">Operational</MetroLink>
+            <MetroLink href="/operation">Operational</MetroLink>
             <MetroLink href="/career">Career</MetroLink>
+            <MetroLink href="/hse-philosophy">HSE Philosophy</MetroLink>
             <MetroLink href="/news">News</MetroLink>
           </div>
           
