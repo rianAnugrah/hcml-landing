@@ -24,7 +24,7 @@ export default function Navbar() {
     { href: "/hse-logo", label: "Logo", icon: Shield },
     { href: "/hse-philosophy", label: "Philosophy", icon: Users },
     { href: "/hse-policy", label: "Policy", icon: FileText },
-    { href: "/hse-donts-dos", label: "Don'ts until Do's", icon: XCircle },
+    { href: "/hse-dont-do", label: "Don'ts until Do's", icon: XCircle },
     { href: "/hse-passport", label: "Passport", icon: CreditCard },
   ];
 
