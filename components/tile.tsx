@@ -8,6 +8,7 @@ export interface TileData {
   color: string;
   size: "small" | "wide" | "tall" | "large";
   content?: React.ReactNode;
+  onClick?: () => void;
 }
 
 interface TileProps {
