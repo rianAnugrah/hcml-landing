@@ -2,6 +2,7 @@
 
 import { LayoutDashboard, Menu, X, Home, Users, Settings, Briefcase, Newspaper, ChevronDown, Shield, FileText, XCircle, CreditCard } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import MetroLink from "./metro-link";
 import { useState } from "react";
 
@@ -66,7 +67,7 @@ export default function Navbar() {
                     {hseItems.map((item, index) => {
                       const IconComponent = item.icon;
                       return (
-                        <a
+                        <Link
                           key={item.href}
                           href={item.href}
                           className={`
@@ -88,7 +89,7 @@ export default function Navbar() {
                             </span>
                           </div>
                           <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
-                        </a>
+                        </Link>
                       );
                     })}
                   </div>
@@ -178,18 +179,16 @@ export default function Navbar() {
             {navItems.map((item, index) => {
               const IconComponent = item.icon;
               return (
-                <div
+                <Link
                   key={item.href}
+                  href={item.href}
                   className={`
                     group relative overflow-hidden 
                     ${index === 0 ? 'col-span-2 h-24' : 'h-20'}
                     ${index % 3 === 0 ? 'bg-[#f6c700]' : index % 3 === 1 ? 'bg-blue-600' : 'bg-green-600'}
                     hover:scale-95 transition-all duration-300 cursor-pointer
                   `}
-                  onClick={() => {
-                    window.location.href = item.href;
-                    setIsSidebarOpen(false);
-                  }}
+                  onClick={() => setIsSidebarOpen(false)}
                 >
                   <div className="absolute inset-0 bg-black bg-opacity-10 group-hover:bg-opacity-20 transition-all duration-300" />
                   <div className="relative h-full flex flex-col items-center justify-center text-white p-3">
@@ -204,7 +203,7 @@ export default function Navbar() {
                   
                   {/* Metro tile animation effect */}
                   <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
-                </div>
+                </Link>
               );
             })}
           </div>
@@ -216,17 +215,15 @@ export default function Navbar() {
               {hseItems.map((item, index) => {
                 const IconComponent = item.icon;
                 return (
-                  <div
+                  <Link
                     key={item.href}
+                    href={item.href}
                     className={`
                       group relative overflow-hidden h-16
                       ${index === 0 ? 'bg-[#f6c700] col-span-2' : index % 4 === 1 ? 'bg-blue-600' : index % 4 === 2 ? 'bg-green-600' : 'bg-purple-600'}
                       hover:scale-95 transition-all duration-300 cursor-pointer
                     `}
-                    onClick={() => {
-                      window.location.href = item.href;
-                      setIsSidebarOpen(false);
-                    }}
+                    onClick={() => setIsSidebarOpen(false)}
                   >
                     <div className="absolute inset-0 bg-black bg-opacity-10 group-hover:bg-opacity-20 transition-all duration-300" />
                     <div className="relative h-full flex flex-col items-center justify-center text-white p-2">
@@ -239,7 +236,7 @@ export default function Navbar() {
                       </span>
                     </div>
                     <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
-                  </div>
+                  </Link>
                 );
               })}
             </div>
