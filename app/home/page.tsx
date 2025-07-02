@@ -125,6 +125,10 @@ const MetroGrid: React.FC<MetroGridProps> = ({ enableDragDrop = false }) => {
       icon: Briefcase,
       color: "bg-[#14213d] text-[#f6c700]",
       size: "wide",
+      isLink: true,
+      onClick: () => {
+        router.push("/operation");
+      },
       // content: "72°F Sunny",
     },
     {
@@ -150,7 +154,9 @@ const MetroGrid: React.FC<MetroGridProps> = ({ enableDragDrop = false }) => {
       icon: Star,
       color: "bg-[#1a2238] text-white",
       size: "small",
+     
       content: "Join Us",
+      isLink: true,
       onClick: () => {
         router.push("/career");
       },
@@ -162,18 +168,22 @@ const MetroGrid: React.FC<MetroGridProps> = ({ enableDragDrop = false }) => {
       color: "bg-[#ff9900] text-white",
       size: "wide",
       content: "5 updates",
+      isLink: true,
+      onClick: () => {
+        router.push("/news");
+      },
     },
   ]);
 
   const [selectedTile, setSelectedTile] = useState<TileData | null>(null);
-  const [mousePosition, setMousePosition] = useState<{ x: number; y: number } | undefined>(undefined);
+  const [tilePosition, setTilePosition] = useState<{ x: number; y: number; width: number; height: number } | undefined>(undefined);
 
-  const handleTileClick = (tileId: number, event?: React.MouseEvent) => {
+  const handleTileClick = (tileId: number, position?: { x: number; y: number; width: number; height: number }) => {
     const tile = tiles.find((t) => t.id === tileId);
     if (tile) {
-      // Capture mouse position for the 3D scale animation
-      if (event) {
-        setMousePosition({ x: event.clientX, y: event.clientY });
+      // Capture tile position for the 3D scale animation
+      if (position) {
+        setTilePosition(position);
       }
       setSelectedTile(tile);
     }
@@ -216,7 +226,7 @@ const MetroGrid: React.FC<MetroGridProps> = ({ enableDragDrop = false }) => {
                     isDragging={isDragging}
                     isDropTarget={isDropTarget}
                     enableDragDrop={enableDragDrop}
-                    onClick={tile.onClick ? (id, event) => tile.onClick!() : handleTileClick}
+                    onClick={tile.onClick ? (id, position) => tile.onClick!() : handleTileClick}
                     onDragStart={(e) => handleDragStart(e, tile, index)}
                     onDragEnd={handleDragEnd}
                     onDragOver={(e) => handleDragOver(e, index)}
@@ -233,7 +243,7 @@ const MetroGrid: React.FC<MetroGridProps> = ({ enableDragDrop = false }) => {
           <FlipModal
             tile={selectedTile}
             onClose={() => setSelectedTile(null)}
-            mousePosition={mousePosition}
+            tilePosition={tilePosition}
           />
         )}
       </div>

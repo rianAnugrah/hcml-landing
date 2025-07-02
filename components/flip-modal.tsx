@@ -7,10 +7,10 @@ interface FlipModalProps {
   tile: TileData;
   onClose: () => void;
   children?: React.ReactNode;
-  mousePosition?: { x: number; y: number };
+  tilePosition?: { x: number; y: number; width: number; height: number };
 }
 
-const FlipModal: React.FC<FlipModalProps> = ({ tile, onClose, children, mousePosition }) => {
+const FlipModal: React.FC<FlipModalProps> = ({ tile, onClose, children, tilePosition }) => {
   const [isClosing, setIsClosing] = useState(false);
   
   const handleClose = () => {
@@ -26,84 +26,103 @@ const FlipModal: React.FC<FlipModalProps> = ({ tile, onClose, children, mousePos
     }
   };
 
-  // Calculate transform origin based on mouse position
-  const getTransformOrigin = () => {
-    if (mousePosition) {
-      const x = (mousePosition.x / window.innerWidth) * 100;
-      const y = (mousePosition.y / window.innerHeight) * 100;
-      return `${x}% ${y}%`;
+  // Calculate positioning and animation properties based on tile position
+  const getModalPositioning = () => {
+    if (tilePosition) {
+      // Calculate the center of the tile
+      const tileCenterX = tilePosition.x + (tilePosition.width / 2);
+      const tileCenterY = tilePosition.y + (tilePosition.height / 2);
+      
+      // Calculate screen center
+      const screenCenterX = window.innerWidth / 2;
+      const screenCenterY = window.innerHeight / 2;
+      
+      // Calculate the translation needed to move from tile center to screen center
+      const translateX = screenCenterX - tileCenterX;
+      const translateY = screenCenterY - tileCenterY;
+      
+      return {
+        initialLeft: tileCenterX,
+        initialTop: tileCenterY,
+        translateX,
+        translateY,
+      };
     }
-    return "50% 50%";
+    return {
+      initialLeft: window.innerWidth / 2,
+      initialTop: window.innerHeight / 2,
+      translateX: 0,
+      translateY: 0,
+    };
   };
+
+  const { initialLeft, initialTop, translateX, translateY } = getModalPositioning();
 
   const modalContent = (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70"
+      className="fixed inset-0 z-50 bg-black/70"
       onClick={handleBackdropClick}
       style={{
         animation: isClosing 
-          ? 'backdropFadeOut 0.3s cubic-bezier(0.4, 0.2, 0.2, 1) forwards'
-          : 'backdropFadeIn 0.3s cubic-bezier(0.4, 0.2, 0.2, 1)'
+          ? 'backdropFadeOut 0.25s cubic-bezier(0.4, 0.2, 0.2, 1) forwards'
+          : 'backdropFadeIn 0.25s cubic-bezier(0.4, 0.2, 0.2, 1)'
       }}
     >
       <div 
-        className="relative w-full max-w-lg mx-4" 
+        className={`absolute w-full max-w-lg ${isClosing ? 'animate-scale-out' : 'animate-scale-in'}`}
         style={{ 
           perspective: 1200,
-          transformOrigin: getTransformOrigin()
-        }}
+          left: initialLeft,
+          top: initialTop,
+          transform: 'translate(-50%, -50%)',
+          '--translate-x': `${translateX}px`,
+          '--translate-y': `${translateY}px`,
+        } as React.CSSProperties}
+        onClick={(e) => e.stopPropagation()}
       >
-        <div 
-          className={`modal-content ${isClosing ? 'animate-scale-out' : 'animate-scale-in'}`}
-          onClick={(e) => e.stopPropagation()}
-          style={{
-            transformOrigin: getTransformOrigin()
-          }}
-        >
-          <div className="bg-white border-0 p-0 flex flex-col overflow-hidden shadow-2xl">
-            {/* Header Bar */}
-            <div className={`${tile.color} p-6 flex items-center justify-between`}>
-              <div className="flex items-center space-x-4">
-                <div className="bg-white/20 w-12 h-12 flex items-center justify-center">
-                  {tile.icon && <tile.icon size={24} className="text-white" />}
-                </div>
-                <h2 className="text-2xl font-light text-white uppercase tracking-wide">{tile.title}</h2>
+        <div className="bg-white border-0 p-0 flex flex-col overflow-hidden shadow-2xl">
+          {/* Header Bar */}
+          <div className={`${tile.color} p-6 flex items-center justify-between`}>
+            <div className="flex items-center space-x-4">
+              <div className="bg-white/20 w-12 h-12 flex items-center justify-center">
+                {tile.icon && <tile.icon size={24} className="text-white" />}
               </div>
+              <h2 className="text-2xl font-light text-white uppercase tracking-wide">{tile.title}</h2>
+            </div>
+            <button
+              className="text-white/80 hover:text-white transition-colors duration-200 p-2 hover:bg-white/10"
+              onClick={handleClose}
+              aria-label="Close"
+            >
+              <X size={24} strokeWidth={1}/>
+            </button>
+          </div>
+          
+          {/* Content Area */}
+          <div className="p-8 flex-1">
+            <div className="text-gray-800 text-lg font-light leading-relaxed mb-6">
+              {tile.content}
+            </div>
+            
+            {/* Additional Content */}
+            {tile.children && (
+              <div className="border-l-4 border-gray-300 pl-6 mt-8">
+                <div className="text-gray-600 text-sm font-light tracking-wider">
+                  {tile.children}
+                </div>
+              </div>
+            )}
+          </div>
+          
+          {/* Bottom Action Bar */}
+          <div className="bg-gray-100 px-8 py-4 border-t border-gray-200">
+            <div className="flex justify-end">
               <button
-                className="text-white/80 hover:text-white transition-colors duration-200 p-2 hover:bg-white/10"
                 onClick={handleClose}
-                aria-label="Close"
+                className="bg-gray-800 text-white px-8 py-3 uppercase text-sm font-medium tracking-wide hover:bg-gray-700 transition-colors duration-200"
               >
-                <X size={24} strokeWidth={1}/>
+                Close
               </button>
-            </div>
-            
-            {/* Content Area */}
-            <div className="p-8 flex-1">
-              <div className="text-gray-800 text-lg font-light leading-relaxed mb-6">
-                {tile.content}
-              </div>
-              
-              {/* Additional Content */}
-              {tile.children && (
-                <div className="border-l-4 border-gray-300 pl-6 mt-8">
-                  <div className="text-gray-600 text-sm font-light tracking-wider">
-                    {tile.children}
-                  </div>
-                </div>
-              )}
-            </div>
-            
-            {/* Bottom Action Bar */}
-            <div className="bg-gray-100 px-8 py-4 border-t border-gray-200">
-              <div className="flex justify-end">
-                <button
-                  onClick={handleClose}
-                  className="bg-gray-800 text-white px-8 py-3 uppercase text-sm font-medium tracking-wide hover:bg-gray-700 transition-colors duration-200"
-                >
-                  Close
-                </button>
-              </div>
             </div>
           </div>
         </div>
@@ -137,22 +156,22 @@ const FlipModal: React.FC<FlipModalProps> = ({ tile, onClose, children, mousePos
         
         @keyframes scaleIn {
           from {
-            transform: scale3d(0.1, 0.1, 1);
+            transform: translate(-50%, -50%) scale3d(0.1, 0.1, 1);
             opacity: 0;
           }
           to {
-            transform: scale3d(1, 1, 1);
+            transform: translate(calc(-50% + var(--translate-x, 0px)), calc(-50% + var(--translate-y, 0px))) scale3d(1, 1, 1);
             opacity: 1;
           }
         }
         
         @keyframes scaleOut {
           from {
-            transform: scale3d(1, 1, 1);
+            transform: translate(calc(-50% + var(--translate-x, 0px)), calc(-50% + var(--translate-y, 0px))) scale3d(1, 1, 1);
             opacity: 1;
           }
           to {
-            transform: scale3d(0.1, 0.1, 1);
+            transform: translate(-50%, -50%) scale3d(0.1, 0.1, 1);
             opacity: 0;
           }
         }

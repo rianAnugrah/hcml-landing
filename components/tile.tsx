@@ -1,4 +1,5 @@
-import React from "react";
+import { ExternalLink } from "lucide-react";
+import React, { useRef } from "react";
 
 export interface TileData {
   id: number;
@@ -6,6 +7,7 @@ export interface TileData {
   icon?: React.ComponentType<{ size?: number; className?: string }>;
   image?: string;
   color: string;
+  isLink?: boolean;
   size: "small" | "wide" | "tall" | "large";
   content?: React.ReactNode;
   onClick?: () => void;
@@ -17,7 +19,11 @@ interface TileProps {
   isDragging?: boolean;
   isDropTarget?: boolean;
   enableDragDrop?: boolean;
-  onClick?: (id: number, event?: React.MouseEvent) => void;
+  onClick?: (
+    id: number,
+    tilePosition?: { x: number; y: number; width: number; height: number }
+  ) => void;
+
   onDragStart?: (e: React.DragEvent<HTMLDivElement>) => void;
   onDragEnd?: (e: React.DragEvent<HTMLDivElement>) => void;
   onDragOver?: (e: React.DragEvent<HTMLDivElement>) => void;
@@ -64,11 +70,27 @@ const Tile: React.FC<TileProps> = ({
   onDragOver,
   onDragLeave,
   onDrop,
+ 
 }) => {
   const IconComponent = tile.icon;
-  
+  const tileRef = useRef<HTMLDivElement>(null);
+
+  const handleClick = (event: React.MouseEvent) => {
+    if (onClick && tileRef.current) {
+      const rect = tileRef.current.getBoundingClientRect();
+      const tilePosition = {
+        x: rect.left,
+        y: rect.top,
+        width: rect.width,
+        height: rect.height,
+      };
+      onClick(tile.id, tilePosition);
+    }
+  };
+
   return (
     <div
+      ref={tileRef}
       key={tile.id}
       draggable={enableDragDrop}
       onDragStart={enableDragDrop ? onDragStart : undefined}
@@ -76,7 +98,7 @@ const Tile: React.FC<TileProps> = ({
       onDragOver={enableDragDrop ? onDragOver : undefined}
       onDragLeave={enableDragDrop ? onDragLeave : undefined}
       onDrop={enableDragDrop ? onDrop : undefined}
-      onClick={(event) => onClick && onClick(tile.id, event)}
+      onClick={handleClick}
       className={`
         ${tile.color}
         ${getSizeClasses(tile.size)}
@@ -94,7 +116,11 @@ const Tile: React.FC<TileProps> = ({
         p-4 sm:p-0
         border-2 border-gray-900
         ${isDragging ? "opacity-100 scale-95" : ""}
-        ${isDropTarget && enableDragDrop ? "ring-2 sm:ring-4 ring-white ring-opacity-50 scale-90" : ""}
+        ${
+          isDropTarget && enableDragDrop
+            ? "ring-2 sm:ring-4 ring-white ring-opacity-50 scale-90"
+            : ""
+        }
         select-none
         touch-manipulation
       `}
@@ -133,10 +159,22 @@ const Tile: React.FC<TileProps> = ({
         {IconComponent ? (
           <div className="flex justify-start">
             <IconComponent
-              className={`${getIconClasses(tile.size)} drop-shadow-lg group-hover:scale-110 transition-transform duration-300`}
+              className={`${getIconClasses(
+                tile.size
+              )} drop-shadow-lg group-hover:scale-110 transition-transform duration-300`}
             />
           </div>
-        ) : <div>&nbsp;</div>}
+        ) : (
+          <div>&nbsp;</div>
+        )}
+
+        {tile.isLink ? (
+          <div className="absolute top-5 right-4">
+            <ExternalLink size={16} />
+          </div>
+        ) : (
+          <div>&nbsp;</div>
+        )}
 
         {/* Title and Content - Responsive Text */}
         <div className="flex flex-col justify-end">
@@ -174,4 +212,4 @@ const Tile: React.FC<TileProps> = ({
   );
 };
 
-export default Tile; 
+export default Tile;
