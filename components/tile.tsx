@@ -9,6 +9,7 @@ export interface TileData {
   size: "small" | "wide" | "tall" | "large";
   content?: React.ReactNode;
   onClick?: () => void;
+  children?: React.ReactNode;
 }
 
 interface TileProps {
@@ -16,7 +17,7 @@ interface TileProps {
   isDragging?: boolean;
   isDropTarget?: boolean;
   enableDragDrop?: boolean;
-  onClick?: (id: number) => void;
+  onClick?: (id: number, event?: React.MouseEvent) => void;
   onDragStart?: (e: React.DragEvent<HTMLDivElement>) => void;
   onDragEnd?: (e: React.DragEvent<HTMLDivElement>) => void;
   onDragOver?: (e: React.DragEvent<HTMLDivElement>) => void;
@@ -75,7 +76,7 @@ const Tile: React.FC<TileProps> = ({
       onDragOver={enableDragDrop ? onDragOver : undefined}
       onDragLeave={enableDragDrop ? onDragLeave : undefined}
       onDrop={enableDragDrop ? onDrop : undefined}
-      onClick={() => onClick && onClick(tile.id)}
+      onClick={(event) => onClick && onClick(tile.id, event)}
       className={`
         ${tile.color}
         ${getSizeClasses(tile.size)}

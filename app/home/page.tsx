@@ -33,7 +33,6 @@ interface MetroGridProps {
 }
 
 const MetroGrid: React.FC<MetroGridProps> = ({ enableDragDrop = false }) => {
-
   const router = useRouter();
   const [tiles, setTiles] = useState<TileData[]>([
     {
@@ -83,15 +82,33 @@ const MetroGrid: React.FC<MetroGridProps> = ({ enableDragDrop = false }) => {
       color: "bg-[#008080] text-white",
       size: "wide",
       image: "/images/work-plan.jpg",
+      children: (
+        <>
+          <img
+            src="/images/work-plan.jpg"
+            alt="Work Plan"
+            className="w-full h-full object-cover"
+          />
+          <div className="text-gray-600 text-sm font-light tracking-wider">
+            <p>
+              HCML is committed to delivering safe, reliable, and efficient
+              operations to meet the energy needs of our stakeholders and
+              communities.
+            </p>
+          </div>
+        </>
+      ),
       // content: "247 photos",
     },
-    
+
     {
       id: 3,
       title: "BD Field",
       image: "/images/bd-field.jpg",
       color: "bg-[#14213d] text-white",
       size: "wide",
+      children:
+        "Continuously striving to become the biggest gas producer in East Java and the operator of choice in Indonesia, HCML launched a field development program for one of its gas fields, Madura BD field, which was discovered in 1987. It is estimated that Madura BD field, which is located approximately 65 km East of Surabaya and 16 km South of Madura Island, contains reserves of 422 BCF (billion cubic feet) of natural gas and 18.7 MMBBL (million barrels) of condensate.",
     },
     {
       id: 5,
@@ -99,6 +116,8 @@ const MetroGrid: React.FC<MetroGridProps> = ({ enableDragDrop = false }) => {
       image: "/images/mda-mbh-field.jpg",
       color: "bg-[#f6c700] text-[#1a2238]",
       size: "wide",
+      children:
+        "HCML is the operator of the MDA & MBH field, which is located approximately 100 km East of Surabaya and 10 km South of Madura Island. The field was discovered in 1987 and is estimated to contain reserves of 1.2 BCF (billion cubic feet) of natural gas and 1.2 MMBBL (million barrels) of condensate.",
     },
     {
       id: 14,
@@ -133,7 +152,7 @@ const MetroGrid: React.FC<MetroGridProps> = ({ enableDragDrop = false }) => {
       size: "small",
       content: "Join Us",
       onClick: () => {
-        router.push('/career');
+        router.push("/career");
       },
     },
     {
@@ -147,10 +166,17 @@ const MetroGrid: React.FC<MetroGridProps> = ({ enableDragDrop = false }) => {
   ]);
 
   const [selectedTile, setSelectedTile] = useState<TileData | null>(null);
+  const [mousePosition, setMousePosition] = useState<{ x: number; y: number } | undefined>(undefined);
 
-  const handleTileClick = (tileId: number) => {
+  const handleTileClick = (tileId: number, event?: React.MouseEvent) => {
     const tile = tiles.find((t) => t.id === tileId);
-    if (tile) setSelectedTile(tile);
+    if (tile) {
+      // Capture mouse position for the 3D scale animation
+      if (event) {
+        setMousePosition({ x: event.clientX, y: event.clientY });
+      }
+      setSelectedTile(tile);
+    }
   };
 
   const handleTilesReorder = (newTiles: TileData[]) => {
@@ -190,7 +216,7 @@ const MetroGrid: React.FC<MetroGridProps> = ({ enableDragDrop = false }) => {
                     isDragging={isDragging}
                     isDropTarget={isDropTarget}
                     enableDragDrop={enableDragDrop}
-                    onClick={tile.onClick ? tile.onClick : handleTileClick}
+                    onClick={tile.onClick ? (id, event) => tile.onClick!() : handleTileClick}
                     onDragStart={(e) => handleDragStart(e, tile, index)}
                     onDragEnd={handleDragEnd}
                     onDragOver={(e) => handleDragOver(e, index)}
@@ -207,6 +233,7 @@ const MetroGrid: React.FC<MetroGridProps> = ({ enableDragDrop = false }) => {
           <FlipModal
             tile={selectedTile}
             onClose={() => setSelectedTile(null)}
+            mousePosition={mousePosition}
           />
         )}
       </div>

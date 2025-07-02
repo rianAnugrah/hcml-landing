@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { TileData } from "@/components/tile";
 import { X } from "lucide-react";
@@ -7,26 +7,60 @@ interface FlipModalProps {
   tile: TileData;
   onClose: () => void;
   children?: React.ReactNode;
+  mousePosition?: { x: number; y: number };
 }
 
-const FlipModal: React.FC<FlipModalProps> = ({ tile, onClose, children }) => {
+const FlipModal: React.FC<FlipModalProps> = ({ tile, onClose, children, mousePosition }) => {
+  const [isClosing, setIsClosing] = useState(false);
+  
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      onClose();
+    }, 300);
+  };
+
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
-      onClose();
+      handleClose();
     }
+  };
+
+  // Calculate transform origin based on mouse position
+  const getTransformOrigin = () => {
+    if (mousePosition) {
+      const x = (mousePosition.x / window.innerWidth) * 100;
+      const y = (mousePosition.y / window.innerHeight) * 100;
+      return `${x}% ${y}%`;
+    }
+    return "50% 50%";
   };
 
   const modalContent = (
     <div 
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/70"
       onClick={handleBackdropClick}
+      style={{
+        animation: isClosing 
+          ? 'backdropFadeOut 0.3s cubic-bezier(0.4, 0.2, 0.2, 1) forwards'
+          : 'backdropFadeIn 0.3s cubic-bezier(0.4, 0.2, 0.2, 1)'
+      }}
     >
-      <div className="relative w-full max-w-lg mx-4" style={{ perspective: 1200 }}>
+      <div 
+        className="relative w-full max-w-lg mx-4" 
+        style={{ 
+          perspective: 1200,
+          transformOrigin: getTransformOrigin()
+        }}
+      >
         <div 
-          className="flip-card-inner animate-flip"
+          className={`modal-content ${isClosing ? 'animate-scale-out' : 'animate-scale-in'}`}
           onClick={(e) => e.stopPropagation()}
+          style={{
+            transformOrigin: getTransformOrigin()
+          }}
         >
-          <div className="flip-card-front bg-white border-0 p-0 flex flex-col overflow-hidden">
+          <div className="bg-white border-0 p-0 flex flex-col overflow-hidden shadow-2xl">
             {/* Header Bar */}
             <div className={`${tile.color} p-6 flex items-center justify-between`}>
               <div className="flex items-center space-x-4">
@@ -37,7 +71,7 @@ const FlipModal: React.FC<FlipModalProps> = ({ tile, onClose, children }) => {
               </div>
               <button
                 className="text-white/80 hover:text-white transition-colors duration-200 p-2 hover:bg-white/10"
-                onClick={onClose}
+                onClick={handleClose}
                 aria-label="Close"
               >
                 <X size={24} strokeWidth={1}/>
@@ -51,10 +85,10 @@ const FlipModal: React.FC<FlipModalProps> = ({ tile, onClose, children }) => {
               </div>
               
               {/* Additional Content */}
-              {children && (
+              {tile.children && (
                 <div className="border-l-4 border-gray-300 pl-6 mt-8">
-                  <div className="text-gray-600 text-sm font-light uppercase tracking-wider">
-                    {children}
+                  <div className="text-gray-600 text-sm font-light tracking-wider">
+                    {tile.children}
                   </div>
                 </div>
               )}
@@ -64,7 +98,7 @@ const FlipModal: React.FC<FlipModalProps> = ({ tile, onClose, children }) => {
             <div className="bg-gray-100 px-8 py-4 border-t border-gray-200">
               <div className="flex justify-end">
                 <button
-                  onClick={onClose}
+                  onClick={handleClose}
                   className="bg-gray-800 text-white px-8 py-3 uppercase text-sm font-medium tracking-wide hover:bg-gray-700 transition-colors duration-200"
                 >
                   Close
@@ -75,22 +109,56 @@ const FlipModal: React.FC<FlipModalProps> = ({ tile, onClose, children }) => {
         </div>
       </div>
       <style jsx>{`
-        .flip-card-inner {
-          transition: transform 0.3s cubic-bezier(0.4, 0.2, 0.2, 1);
-          transform-style: preserve-3d;
-        }
-        .animate-flip {
-          animation: flipIn 0.3s cubic-bezier(0.4, 0.2, 0.2, 1);
-        }
-        @keyframes flipIn {
+        @keyframes backdropFadeIn {
           from {
-            transform: rotateY(90deg) scale(0.9);
             opacity: 0;
           }
           to {
-            transform: rotateY(0deg) scale(1);
             opacity: 1;
           }
+        }
+        
+        @keyframes backdropFadeOut {
+          from {
+            opacity: 1;
+          }
+          to {
+            opacity: 0;
+          }
+        }
+        
+        .animate-scale-in {
+          animation: scaleIn 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+        
+        .animate-scale-out {
+          animation: scaleOut 0.25s cubic-bezier(0.55, 0.06, 0.68, 0.19) forwards;
+        }
+        
+        @keyframes scaleIn {
+          from {
+            transform: scale3d(0.1, 0.1, 1);
+            opacity: 0;
+          }
+          to {
+            transform: scale3d(1, 1, 1);
+            opacity: 1;
+          }
+        }
+        
+        @keyframes scaleOut {
+          from {
+            transform: scale3d(1, 1, 1);
+            opacity: 1;
+          }
+          to {
+            transform: scale3d(0.1, 0.1, 1);
+            opacity: 0;
+          }
+        }
+        
+        .modal-content {
+          transform-style: preserve-3d;
         }
       `}</style>
     </div>
