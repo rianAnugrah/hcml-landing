@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import {
   Mail,
   Phone,
@@ -193,12 +194,28 @@ const MetroGrid: React.FC<MetroGridProps> = ({ enableDragDrop = false }) => {
     setTiles(newTiles);
   };
 
+  // Animation variants for grid container entrance effect
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.3,
+      },
+    },
+  };
+
   return (
     <div className="p-3 sm:p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl text-white mb-4 sm:my-6 md:my-12 ">
+        <motion.h1 
+          className="text-2xl sm:text-3xl md:text-4xl text-white mb-4 sm:my-6 md:my-12"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
           <strong>HCML</strong> - Husky-CNOOC Madura Limited
-        </h1>
+        </motion.h1>
 
         <DragDropWrapper
           tiles={tiles}
@@ -215,7 +232,12 @@ const MetroGrid: React.FC<MetroGridProps> = ({ enableDragDrop = false }) => {
             handleDragLeave,
             handleDrop,
           }) => (
-            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-8 gap-0 auto-rows-min">
+            <motion.div 
+              className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-8 gap-0 auto-rows-min"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+            >
               {currentTiles.map((tile, index) => {
                 const isDragging = draggedTile?.index === index;
                 const isDropTarget = dragOverIndex === index;
@@ -226,6 +248,7 @@ const MetroGrid: React.FC<MetroGridProps> = ({ enableDragDrop = false }) => {
                     isDragging={isDragging}
                     isDropTarget={isDropTarget}
                     enableDragDrop={enableDragDrop}
+                    animationDelay={index * 0.08 + 0.2}
                     onClick={tile.onClick ? (id, position) => tile.onClick!() : handleTileClick}
                     onDragStart={(e) => handleDragStart(e, tile, index)}
                     onDragEnd={handleDragEnd}
@@ -235,7 +258,7 @@ const MetroGrid: React.FC<MetroGridProps> = ({ enableDragDrop = false }) => {
                   />
                 );
               })}
-            </div>
+            </motion.div>
           )}
         </DragDropWrapper>
 

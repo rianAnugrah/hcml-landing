@@ -1,5 +1,6 @@
 import { ExternalLink } from "lucide-react";
 import React, { useRef } from "react";
+import { motion } from "framer-motion";
 
 export interface TileData {
   id: number;
@@ -19,6 +20,7 @@ interface TileProps {
   isDragging?: boolean;
   isDropTarget?: boolean;
   enableDragDrop?: boolean;
+  animationDelay?: number;
   onClick?: (
     id: number,
     tilePosition?: { x: number; y: number; width: number; height: number }
@@ -64,13 +66,13 @@ const Tile: React.FC<TileProps> = ({
   isDragging = false,
   isDropTarget = false,
   enableDragDrop = false,
+  animationDelay,
   onClick,
   onDragStart,
   onDragEnd,
   onDragOver,
   onDragLeave,
   onDrop,
- 
 }) => {
   const IconComponent = tile.icon;
   const tileRef = useRef<HTMLDivElement>(null);
@@ -89,16 +91,43 @@ const Tile: React.FC<TileProps> = ({
   };
 
   return (
-    <div
+    <motion.div
       ref={tileRef}
       key={tile.id}
       draggable={enableDragDrop}
-      onDragStart={enableDragDrop ? onDragStart : undefined}
-      onDragEnd={enableDragDrop ? onDragEnd : undefined}
-      onDragOver={enableDragDrop ? onDragOver : undefined}
-      onDragLeave={enableDragDrop ? onDragLeave : undefined}
-      onDrop={enableDragDrop ? onDrop : undefined}
       onClick={handleClick}
+      initial={{
+        opacity: 0,
+        scale: 0.8,
+        y: 20,
+      }}
+      animate={{
+        opacity: 1,
+        scale: 1,
+        y: 0,
+      }}
+      transition={{
+        type: "spring" as const,
+        stiffness: 300,
+        damping: 20,
+        duration: 0.6,
+        delay: animationDelay || 0,
+      }}
+      whileHover={{ 
+        scale: 1.05,
+        transition: { duration: 0.2 } 
+      }}
+      whileTap={{ 
+        scale: 0.95,
+        transition: { duration: 0.1 } 
+      }}
+      {...(enableDragDrop && {
+        onDragStart: onDragStart as any,
+        onDragEnd: onDragEnd as any,
+        onDragOver: onDragOver as any,
+        onDragLeave: onDragLeave as any,
+        onDrop: onDrop as any,
+      })}
       className={`
         ${tile.color}
         ${getSizeClasses(tile.size)}
@@ -106,10 +135,9 @@ const Tile: React.FC<TileProps> = ({
         ${enableDragDrop ? "cursor-move" : "cursor-pointer"}
         relative
         overflow-hidden
-        transition-all
+        transition-shadow
         duration-300
         ease-in-out
-        hover:scale-90
         hover:shadow-2xl
         hover:z-10
         group
@@ -208,7 +236,7 @@ const Tile: React.FC<TileProps> = ({
 
       {/* Active/Selected Indicator - Responsive */}
       {/* <div className="absolute top-1 right-1 sm:top-2 sm:right-2 w-2 h-2 sm:w-3 sm:h-3 bg-white bg-opacity-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div> */}
-    </div>
+    </motion.div>
   );
 };
 
