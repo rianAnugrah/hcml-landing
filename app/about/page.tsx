@@ -47,7 +47,10 @@ function CountingNumber({ target, delay = 0, duration = 2 }: { target: number; d
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      const controls = animate(count, target, { duration });
+      const controls = animate(count, target, { 
+        duration,
+        ease: [0.25, 0.46, 0.45, 1] // Really slow ending cubic-bezier
+      });
       return controls.stop;
     }, delay * 1000);
 
@@ -217,7 +220,7 @@ export default function AboutPage() {
                   transition={{ delay: 1.2, duration: 0.5 }}
                 >
                   <div className="text-4xl font-light text-blue-400 mb-2">
-                    <CountingNumber target={250} delay={1.2} duration={1.5} />
+                    <CountingNumber target={250} delay={1.2} duration={15.5} />
                   </div>
                   <div className="text-slate-300 font-light text-sm tracking-wide">MMSCFD CAPACITY</div>
                 </motion.div>
@@ -228,7 +231,7 @@ export default function AboutPage() {
                   transition={{ delay: 1.4, duration: 0.5 }}
                 >
                   <div className="text-4xl font-light text-purple-400 mb-2">
-                    <CountingNumber target={2013} delay={1.4} duration={1.8} />
+                    <CountingNumber target={2013} delay={1.4} duration={15.8} />
                   </div>
                   <div className="text-slate-300 font-light text-sm tracking-wide">ESTABLISHED</div>
                 </motion.div>
@@ -239,7 +242,7 @@ export default function AboutPage() {
                   transition={{ delay: 1.6, duration: 0.5 }}
                 >
                   <div className="text-4xl font-light text-green-400 mb-2">
-                    <CountingNumber target={230} delay={1.6} duration={1.5} />
+                    <CountingNumber target={230} delay={1.6} duration={15.5} />
                   </div>
                   <div className="text-slate-300 font-light text-sm tracking-wide">CURRENT MMSCFD</div>
                 </motion.div>

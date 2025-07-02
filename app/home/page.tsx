@@ -52,6 +52,10 @@ const MetroGrid: React.FC<MetroGridProps> = ({ enableDragDrop = false }) => {
       color: "bg-[#14213d] text-white",
       size: "small",
       content: "HCML",
+      isLink: true,
+      onClick: () => {
+        router.push("/about");
+      },
     },
     {
       id: 1,
