@@ -33,9 +33,9 @@ export default function Navbar() {
       {/* Desktop Navbar */}
       <div className="bg-[#1a2238] px-6 hidden lg:block">
         <div className="max-w-7xl mx-auto gap-6 h-[5rem] flex items-center">
-          <button className="hover:bg-[#f6c700] h-full aspect-square flex cursor-pointer transition-all duration-300 hover:scale-90 items-center bg-gray-700 justify-center">
+          {/* <button className="hover:bg-[#f6c700] h-full aspect-square flex cursor-pointer transition-all duration-300 hover:scale-90 items-center bg-gray-700 justify-center">
             <LayoutDashboard />
-          </button>
+          </button> */}
           <div className="flex flex-grow relative gap-4">
             <MetroLink href="/">Home</MetroLink>
             <MetroLink href="/about">About Us</MetroLink>
