@@ -25,6 +25,12 @@ interface Article {
   meta_keywords: string;
 }
 
+interface UserOption {
+  id: string;
+  name?: string;
+  email?: string;
+}
+
 const initialForm: Article = {
   title: "",
   slug: "",
@@ -52,6 +58,7 @@ export default function ArticleAdminPage() {
   const [editId, setEditId] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [users, setUsers] = useState<UserOption[]>([]);
 
   // Fetch articles
   const fetchArticles = async () => {
@@ -67,8 +74,21 @@ export default function ArticleAdminPage() {
     setLoading(false);
   };
 
+  // Fetch users for author dropdown
+  const fetchUsers = async () => {
+    try {
+      const res = await pb.collection("users").getFullList<UserOption>({
+        sort: "name,email"
+      });
+      setUsers(res);
+    } catch (e) {
+      // Optionally handle error
+    }
+  };
+
   useEffect(() => {
     fetchArticles();
+    fetchUsers();
   }, []);
 
   // Handle form field changes
@@ -239,8 +259,21 @@ export default function ArticleAdminPage() {
                   <textarea name="content" value={form.content} onChange={handleChange} className="w-full border border-gray-400 rounded px-2 py-1 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400" rows={3} />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-900">Author (ID)</label>
-                  <input name="author" value={form.author} onChange={handleChange} className="w-full border border-gray-400 rounded px-2 py-1 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                  <label className="block text-sm font-medium text-gray-900">Author</label>
+                  <select
+                    name="author"
+                    value={form.author}
+                    onChange={handleChange}
+                    className="w-full border border-gray-400 rounded px-2 py-1 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    required
+                  >
+                    <option value="">Select author...</option>
+                    {users.map((u) => (
+                      <option key={u.id} value={u.id}>
+                        {u.name || u.email || u.id}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-900">Category (ID)</label>
