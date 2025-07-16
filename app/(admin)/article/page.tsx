@@ -31,6 +31,23 @@ interface UserOption {
   email?: string;
 }
 
+interface CategoryOption {
+  id: string;
+  name: string;
+  slug?: string;
+  description?: string;
+  color?: string;
+  active?: boolean;
+  sort_order?: number;
+}
+
+interface TagOption {
+  id: string;
+  name: string;
+  slug?: string;
+  color?: string;
+}
+
 const initialForm: Article = {
   title: "",
   slug: "",
@@ -59,6 +76,8 @@ export default function ArticleAdminPage() {
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [users, setUsers] = useState<UserOption[]>([]);
+  const [categories, setCategories] = useState<CategoryOption[]>([]);
+  const [tags, setTags] = useState<TagOption[]>([]);
 
   // Fetch articles
   const fetchArticles = async () => {
@@ -86,9 +105,35 @@ export default function ArticleAdminPage() {
     }
   };
 
+  // Fetch categories for category dropdown
+  const fetchCategories = async () => {
+    try {
+      const res = await pb.collection("news_categories").getFullList<CategoryOption>({
+        sort: "sort_order,name"
+      });
+      setCategories(res);
+    } catch (e) {
+      // Optionally handle error
+    }
+  };
+
+  // Fetch tags for tags dropdown
+  const fetchTags = async () => {
+    try {
+      const res = await pb.collection("news_tags").getFullList<TagOption>({
+        sort: "name"
+      });
+      setTags(res);
+    } catch (e) {
+      // Optionally handle error
+    }
+  };
+
   useEffect(() => {
     fetchArticles();
     fetchUsers();
+    fetchCategories();
+    fetchTags();
   }, []);
 
   // Handle form field changes
@@ -276,12 +321,41 @@ export default function ArticleAdminPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-900">Category (ID)</label>
-                  <input name="category" value={form.category} onChange={handleChange} className="w-full border border-gray-400 rounded px-2 py-1 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                  <label className="block text-sm font-medium text-gray-900">Category</label>
+                  <select
+                    name="category"
+                    value={form.category}
+                    onChange={handleChange}
+                    className="w-full border border-gray-400 rounded px-2 py-1 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    required
+                  >
+                    <option value="">Select category...</option>
+                    {categories.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-900">Tags (comma separated IDs)</label>
-                  <input name="tags" value={form.tags.join(", ")} onChange={handleChange} className="w-full border border-gray-400 rounded px-2 py-1 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                  <label className="block text-sm font-medium text-gray-900">Tags</label>
+                  <select
+                    name="tags"
+                    value={form.tags}
+                    onChange={e => {
+                      const selected = Array.from(e.target.selectedOptions).map(opt => opt.value);
+                      setForm(f => ({ ...f, tags: selected }));
+                    }}
+                    className="w-full border border-gray-400 rounded px-2 py-1 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    multiple
+                  >
+                    {tags.map((t) => (
+                      <option key={t.id} value={t.id}>
+                        {t.name}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="text-xs text-gray-500 mt-1">Hold Ctrl (Windows) or Cmd (Mac) to select multiple tags.</div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-900">Status</label>
