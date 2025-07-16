@@ -210,6 +210,24 @@ export default function ArticleAdminPage() {
     }
   };
 
+  // Helper functions to get display names
+  const getAuthorName = (id: string) => {
+    const user = users.find((u) => u.id === id);
+    return user ? user.name || user.email || user.id : id;
+  };
+  const getCategoryName = (id: string) => {
+    const cat = categories.find((c) => c.id === id);
+    return cat ? cat.name : id;
+  };
+  const getTagNames = (ids: string[]) => {
+    return ids
+      .map((id) => {
+        const tag = tags.find((t) => t.id === id);
+        return tag ? tag.name : id;
+      })
+      .join(", ");
+  };
+
   return (
     <div className="p-8 max-w-6xl mx-auto">
       <div className="flex items-center justify-between mb-8">
@@ -245,9 +263,9 @@ export default function ArticleAdminPage() {
                   <td className="p-2 text-gray-900">{a.title}</td>
                   <td className="p-2 text-gray-900">{a.slug}</td>
                   <td className="p-2 text-gray-900">{a.status}</td>
-                  <td className="p-2 text-gray-900">{a.author}</td>
-                  <td className="p-2 text-gray-900">{a.category}</td>
-                  <td className="p-2 text-gray-900">{Array.isArray(a.tags) ? a.tags.join(", ") : ""}</td>
+                  <td className="p-2 text-gray-900">{getAuthorName(a.author)}</td>
+                  <td className="p-2 text-gray-900">{getCategoryName(a.category)}</td>
+                  <td className="p-2 text-gray-900">{Array.isArray(a.tags) ? getTagNames(a.tags) : ""}</td>
                   <td className="p-2 text-gray-900">{a.views}</td>
                   <td className="p-2 text-gray-900">{a.published_at ? new Date(a.published_at).toLocaleDateString() : ""}</td>
                   <td className="p-2 space-x-2">
